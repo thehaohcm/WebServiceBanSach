@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BANSACH" Class="DataClassesBanSachDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=DESKTOP-QN5U73D;Initial Catalog=BANSACH;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="BANSACHConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.CTDH" Member="CTDHs">
+    <Type Name="CTDH">
+      <Column Name="MaCTDH" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaDH" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="MaSach" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="SoLuong" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Association Name="DONHANG_CTDH" Member="DONHANG" ThisKey="MaDH" OtherKey="MaDH" Type="DONHANG" IsForeignKey="true" />
+      <Association Name="SACH_CTDH" Member="SACH" ThisKey="MaSach" OtherKey="MaSach" Type="SACH" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CTTL" Member="CTTLs">
+    <Type Name="CTTL">
+      <Column Name="MaCTTL" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaSach" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="MaTL" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="SACH_CTTL" Member="SACH" ThisKey="MaSach" OtherKey="MaSach" Type="SACH" IsForeignKey="true" />
+      <Association Name="THELOAI_CTTL" Member="THELOAI" ThisKey="MaTL" OtherKey="MaTL" Type="THELOAI" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DONHANG" Member="DONHANGs">
+    <Type Name="DONHANG">
+      <Column Name="MaDH" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NgayDatHang" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="DiaChi" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="SoDT" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Association Name="DONHANG_CTDH" Member="CTDHs" ThisKey="MaDH" OtherKey="MaDH" Type="CTDH" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NHANXET" Member="NHANXETs">
+    <Type Name="NHANXET">
+      <Column Name="MaNX" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaSach" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="HoTen" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="TieuDe" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="DanhGia" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="SACH_NHANXET" Member="SACH" ThisKey="MaSach" OtherKey="MaSach" Type="SACH" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SACH" Member="SACHes">
+    <Type Name="SACH">
+      <Column Name="MaSach" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TenSach" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="HinhAnh" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="DonGia" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="SLCL" Type="System.Decimal" DbType="Decimal(5,0)" CanBeNull="true" />
+      <Association Name="SACH_CTDH" Member="CTDHs" ThisKey="MaSach" OtherKey="MaSach" Type="CTDH" />
+      <Association Name="SACH_CTTL" Member="CTTLs" ThisKey="MaSach" OtherKey="MaSach" Type="CTTL" />
+      <Association Name="SACH_NHANXET" Member="NHANXETs" ThisKey="MaSach" OtherKey="MaSach" Type="NHANXET" />
+    </Type>
+  </Table>
+  <Table Name="dbo.THELOAI" Member="THELOAIs">
+    <Type Name="THELOAI">
+      <Column Name="MaTL" Type="System.Byte" DbType="TinyInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TenTL" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="THELOAI_CTTL" Member="CTTLs" ThisKey="MaTL" OtherKey="MaTL" Type="CTTL" />
+    </Type>
+  </Table>
+  <Function Name="dbo.GETALLTENTHELOAI" Method="GETALLTENTHELOAI">
+    <ElementType Name="GETALLTENTHELOAIResult">
+      <Column Name="TENTL" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GETALLTHELOAI" Method="GETALLTHELOAI">
+    <ElementType Name="GETALLTHELOAIResult">
+      <Column Name="MaTL" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TenTL" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getCTDHbyMaDonHang" Method="getCTDHbyMaDonHang">
+    <Parameter Name="madh" Type="System.Int32" DbType="Int" />
+    <ElementType Name="getCTDHbyMaDonHangResult">
+      <Column Name="MaSach" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="TenSach" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="soluong" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="DonGia" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="GiaTien" Type="System.Decimal" DbType="Decimal(38,4)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GETMATHELOAI" Method="GETMATHELOAI">
+    <ElementType Name="GETMATHELOAIResult">
+      <Column Name="MATL" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getNhanXet" Method="getNhanXet">
+    <ElementType Name="getNhanXetResult">
+      <Column Name="MaNX" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="MaSach" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="HoTen" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="TieuDe" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="DanhGia" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GETTENTHELOAIBYID" Method="GETTENTHELOAIBYID">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" />
+    <ElementType Name="GETTENTHELOAIBYIDResult">
+      <Column Name="TENTL" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getTongTien" Method="getTongTien">
+    <Parameter Name="madonhang" Type="System.Decimal" DbType="Decimal(18,0)" />
+    <Parameter Name="tongtien" Type="System.Decimal" DbType="Money" Direction="InOut" />
+  </Function>
+</Database>
